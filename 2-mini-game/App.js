@@ -4,18 +4,31 @@ import StartGameScreen from "./screens/StartGameScreen"
 import { LinearGradient } from "expo-linear-gradient"
 import GameScreen from "./screens/GameScreen"
 import Colors from "./constants/colors"
+import GameOverScreen from "./screens/GameOverScreen"
 
 export default function App() {
-  const [userNumber, setUserNumber] = useState()
+  const [userNumber, setUserNumber] = useState(null)
+  const [isGameOver, setIsGameOver] = useState(false)
 
   function pickedNumberHandler(pickedNumber) {
     setUserNumber(pickedNumber)
+    setIsGameOver(false)
+  }
+
+  function gameOverHandler() {
+    setIsGameOver(true)
   }
 
   let screenChildren = <StartGameScreen onPickedNumber={pickedNumberHandler} />
 
   if (userNumber) {
-    screenChildren = <GameScreen />
+    screenChildren = (
+      <GameScreen userNumber={userNumber} onGameOver={gameOverHandler} />
+    )
+  }
+
+  if (isGameOver && userNumber) {
+    screenChildren = <GameOverScreen />
   }
 
   return (
