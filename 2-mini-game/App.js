@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { StyleSheet, ImageBackground, SafeAreaView } from "react-native"
+import { useFonts } from "expo-font"
+import AppLoading from "expo-app-loading"
 import StartGameScreen from "./screens/StartGameScreen"
 import { LinearGradient } from "expo-linear-gradient"
 import GameScreen from "./screens/GameScreen"
@@ -9,14 +11,26 @@ import GameOverScreen from "./screens/GameOverScreen"
 export default function App() {
   const [userNumber, setUserNumber] = useState(null)
   const [isGameOver, setIsGameOver] = useState(false)
+  const [roundsCount, setRoundsCount] = useState(0)
+
+  const [fontsLoaded] = useFonts({
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  })
 
   function pickedNumberHandler(pickedNumber) {
     setUserNumber(pickedNumber)
     setIsGameOver(false)
   }
 
-  function gameOverHandler() {
+  function gameOverHandler(numberOfRounds) {
     setIsGameOver(true)
+    setRoundsCount(numberOfRounds)
+  }
+
+  function startNewGameHandler() {
+    setUserNumber(null)
+    setRoundsCount(0)
   }
 
   let screenChildren = <StartGameScreen onPickedNumber={pickedNumberHandler} />
@@ -28,7 +42,17 @@ export default function App() {
   }
 
   if (isGameOver && userNumber) {
-    screenChildren = <GameOverScreen />
+    screenChildren = (
+      <GameOverScreen
+        userNumber={userNumber}
+        roundsCount={roundsCount}
+        onStartNewGame={startNewGameHandler}
+      />
+    )
+  }
+
+  if (!fontsLoaded) {
+    return <AppLoading />
   }
 
   return (
