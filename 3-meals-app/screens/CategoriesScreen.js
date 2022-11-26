@@ -3,12 +3,17 @@ import React from "react"
 import { CATEGORIES } from "../data/dummy-data"
 import CategoryGridTile from "../components/CategoryGridTile"
 
-function renderCategoryItem(itemData) {
-  const { item } = itemData
+function renderCategoryItem({ item, navigation }) {
+  function pressHandler() {
+    navigation.navigate("MealsOverview")
+  }
+
   const { title, color } = item
-  return <CategoryGridTile title={title} color={color} />
+
+  return <CategoryGridTile title={title} color={color} onPress={pressHandler} />
 }
 
+// navigation is a prop given to you by the <Stack.Screen /> component
 const CategoriesScreen = () => {
   return (
     <FlatList
