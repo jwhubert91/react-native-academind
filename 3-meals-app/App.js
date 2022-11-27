@@ -1,5 +1,6 @@
 // default libraries
 import { StatusBar } from "expo-status-bar"
+import { Button } from "react-native"
 
 // packages
 import { NavigationContainer } from "@react-navigation/native"
@@ -42,7 +43,15 @@ export default function App() {
             //   }
             // }}
           />
-          <Stack.Screen name="MealDetail" component={MealDetailScreen} />
+          <Stack.Screen
+            name="MealDetail"
+            component={MealDetailScreen}
+            options={{
+              headerRight: () => {
+                return <Button title="Press me!" />
+              },
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
